@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ứng Dụng Đăng Ký, Đăng Nhập</title>
+  </head>
+  <body>
+    <script>
+      let users = [];
+
+      class User {
+        constructor(name, email, password) {
+          this.name = name;
+          this.email = email;
+          this.password = password;
+        }
+      }
+
+      function isValidEmail(email) {
+        const regex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.(com|vn)$/;
+        return regex.test(email);
+      }
+
+      function isValidPassword(password) {
+        const regex = /^(?=.*[A-Z])(?=.*[!@#$%^&*]).{6,}$/;
+        return regex.test(password);
+      }
+
+      function register() {
+        let name = prompt("Mời bạn nhập tên:");
+        let email = prompt("Mời bạn nhập email:");
+        let password = prompt("Mời bạn nhập mật khẩu:");
+
+        if (!isValidEmail(email)) {
+          alert(
+            "Email không hợp lệ. Email phải chứa '@' và kết thúc bằng '.com' hoặc '.vn'."
+          );
+          return;
+        }
+
+        if (!isValidPassword(password)) {
+          alert(
+            "Mật khẩu không hợp lệ. Mật khẩu phải có ít nhất 6 ký tự, bao gồm ký tự đặc biệt và ký tự viết hoa."
+          );
+          return;
+        }
+
+        if (users.some((user) => user.email === email)) {
+          alert("Email đã tồn tại. Vui lòng sử dụng email khác.");
+          return;
+        }
+
+        users.push(new User(name, email, password));
+        alert("Đăng ký thành công!");
+      }
+
+      function login() {
+        let email = prompt("Mời bạn nhập email:");
+        let password = prompt("Mời bạn nhập mật khẩu:");
+
+        let user = users.find(
+          (user) => user.email === email && user.password === password
+        );
+        if (user) {
+          alert(`Đăng nhập thành công! Chào mừng ${user.name}`);
+        } else {
+          alert("Đăng nhập không thành công. Email hoặc mật khẩu không đúng.");
+        }
+      }
+
+      function showMenu() {
+        return prompt(
+          "Mời bạn nhập lựa chọn:\n1. Đăng ký người dùng mới.\n2. Đăng nhập.\n3. Thoát"
+        );
+      }
+
+      let choice;
+      do {
+        choice = showMenu();
+        choice = parseInt(choice);
+
+        switch (choice) {
+          case 1:
+            register();
+            break;
+          case 2:
+            login();
+            break;
+          case 3:
+            alert("Thoát");
+            break;
+          default:
+            alert("Lựa chọn không hợp lệ. Mời bạn chọn lại.");
+        }
+      } while (choice !== 3);
+    </script>
+  </body>
+</html>
