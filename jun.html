@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Danh Bạ Quản Lý</title>
+  </head>
+  <body>
+    <script>
+      let contacts = [];
+
+      function addContact() {
+        let id = +prompt("Mời bạn nhập id:");
+        let name = prompt("Mời bạn nhập tên:");
+        let email = prompt("Mời bạn nhập email:");
+        let phone = prompt("Mời bạn nhập số điện thoại:");
+        contacts.push({ id, name, email, phone });
+        console.log("Liên hệ đã được thêm thành công!");
+        displayContacts();
+      }
+
+      function deleteContact() {
+        let id = +prompt("Mời bạn nhập id liên hệ cần xóa:");
+        let index = contacts.findIndex((contact) => contact.id === id);
+        if (index !== -1) {
+          contacts.splice(index, 1);
+          console.log("Liên hệ đã được xóa thành công!");
+        } else {
+          console.log("Không tìm thấy liên hệ với id này.");
+        }
+        displayContacts();
+      }
+
+      function updateContact() {
+        let id = +prompt("Mời bạn nhập id liên hệ cần cập nhật:");
+        let index = contacts.findIndex((contact) => contact.id === id);
+        if (index !== -1) {
+          let name = prompt("Mời bạn nhập tên mới:");
+          let email = prompt("Mời bạn nhập email mới:");
+          let phone = prompt("Mời bạn nhập số điện thoại mới:");
+          contacts[index] = { id, name, email, phone };
+          console.log("Liên hệ đã được cập nhật!");
+        } else {
+          console.log("Không tìm thấy liên hệ với id này.");
+        }
+        displayContacts();
+      }
+
+      function searchContact() {
+        let phone = prompt("Mời bạn nhập số điện thoại cần tìm:");
+        let result = contacts.filter((contact) => contact.phone === phone);
+        if (result.length > 0) {
+          console.log("Danh bạ liên hệ tìm thấy:");
+          result.forEach((contact) => {
+            console.log(contact);
+          });
+        } else {
+          console.log("Không tìm thấy liên hệ với số điện thoại này.");
+        }
+      }
+
+      function showMenu() {
+        return prompt(
+          "Mời bạn nhập lựa chọn:\n1. Thêm liên hệ mới.\n2. Xóa liên hệ theo id.\n3. Cập nhật thông tin liên hệ theo id.\n4. Tìm kiếm liên hệ theo số điện thoại.\n5. Hiển thị danh sách liên hệ.\n6. Thoát"
+        );
+      }
+
+      function showContacts() {
+        if (contacts.length > 0) {
+          console.log("Danh sách liên hệ:");
+          console.table(contacts);
+        } else {
+          console.log("Danh bạ hiện đang không có liên hệ nào.");
+        }
+      }
+
+      function displayContacts() {
+        console.clear();
+        showContacts();
+      }
+
+      let chose;
+      do {
+        chose = showMenu();
+        chose = parseInt(chose);
+
+        switch (chose) {
+          case 1:
+            addContact();
+            break;
+          case 2:
+            deleteContact();
+            break;
+          case 3:
+            updateContact();
+            break;
+          case 4:
+            searchContact();
+            break;
+          case 5:
+            displayContacts();
+            break;
+          case 6:
+            console.log("Thoát");
+            break;
+          default:
+            console.log("Không hợp lệ. Mời chọn lại");
+        }
+      } while (chose !== 6);
+    </script>
+  </body>
+</html>
