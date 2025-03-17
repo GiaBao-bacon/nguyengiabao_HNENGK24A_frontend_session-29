@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Menu Nhà Hàng</title>
+  </head>
+  <body>
+    <script>
+      let menu = [];
+
+      class Dish {
+        constructor(name, price, description) {
+          this.name = name;
+          this.price = price;
+          this.description = description;
+        }
+
+        update(name, price, description) {
+          if (name) this.name = name;
+          if (price) this.price = price;
+          if (description) this.description = description;
+        }
+
+        getDetails() {
+          return `${this.name} - ${this.price} VND: ${this.description}`;
+        }
+      }
+
+      function addDishToCategory() {
+        let categoryName = prompt("Mời bạn nhập tên danh mục:");
+        let dishName = prompt("Mời bạn nhập tên món ăn:");
+        let price = +prompt("Mời bạn nhập giá món ăn:");
+        let description = prompt("Mời bạn nhập mô tả món ăn:");
+
+        let category = menu.find((cat) => cat.name === categoryName);
+        if (!category) {
+          category = { name: categoryName, dishes: [] };
+          menu.push(category);
+        }
+
+        category.dishes.push(new Dish(dishName, price, description));
+        alert("Món ăn đã được thêm vào danh mục!");
+      }
+
+      function deleteDishFromCategory() {
+        let dishName = prompt("Mời bạn nhập tên món ăn cần xóa:");
+        let categoryName = prompt("Mời bạn nhập tên danh mục:");
+
+        let category = menu.find((cat) => cat.name === categoryName);
+        if (category) {
+          let dishIndex = category.dishes.findIndex(
+            (dish) => dish.name === dishName
+          );
+          if (dishIndex !== -1) {
+            category.dishes.splice(dishIndex, 1);
+            alert("Món ăn đã được xóa!");
+          } else {
+            alert("Không tìm thấy món ăn trong danh mục này.");
+          }
+        } else {
+          alert("Không tìm thấy danh mục này.");
+        }
+      }
+
+      function updateDishInfo() {
+        let dishName = prompt("Mời bạn nhập tên món ăn cần cập nhật:");
+        let categoryName = prompt("Mời bạn nhập tên danh mục:");
+
+        let category = menu.find((cat) => cat.name === categoryName);
+        if (category) {
+          let dish = category.dishes.find((dish) => dish.name === dishName);
+          if (dish) {
+            let newName = prompt(
+              "Mời bạn nhập tên mới (để trống nếu không thay đổi):"
+            );
+            let newPrice = prompt(
+              "Mời bạn nhập giá mới (để trống nếu không thay đổi):"
+            );
+            let newDescription = prompt(
+              "Mời bạn nhập mô tả mới (để trống nếu không thay đổi):"
+            );
+
+            dish.update(
+              newName || dish.name,
+              newPrice || dish.price,
+              newDescription || dish.description
+            );
+            alert("Thông tin món ăn đã được cập nhật!");
+          } else {
+            alert("Không tìm thấy món ăn trong danh mục này.");
+          }
+        } else {
+          alert("Không tìm thấy danh mục này.");
+        }
+      }
+
+      function showMenu() {
+        return prompt(
+          "Mời bạn nhập lựa chọn:\n1. Thêm món ăn vào danh mục.\n2. Xóa món ăn theo tên.\n3. Cập nhật thông tin món ăn.\n4. Hiển thị toàn bộ menu.\n5. Tìm kiếm món ăn theo tên.\n6. Thoát"
+        );
+      }
+
+      function showAllMenu() {
+        let allMenu = menu
+          .map((category) => {
+            return (
+              `${category.name}:\n` +
+              category.dishes.map((dish) => dish.getDetails()).join("\n")
+            );
+          })
+          .join("\n\n");
+
+        alert(allMenu || "Menu hiện tại không có món ăn nào.");
+      }
+
+      function searchDishByName() {
+        let dishName = prompt("Mời bạn nhập tên món ăn cần tìm:");
+        let result = menu
+          .flatMap((category) => category.dishes)
+          .filter((dish) =>
+            dish.name.toLowerCase().includes(dishName.toLowerCase())
+          );
+
+        if (result.length > 0) {
+          alert(
+            "Kết quả tìm kiếm:\n" +
+              result.map((dish) => dish.getDetails()).join("\n")
+          );
+        } else {
+          alert("Không tìm thấy món ăn với tên này.");
+        }
+      }
+
+      let choice;
+      do {
+        choice = showMenu();
+        choice = parseInt(choice);
+
+        switch (choice) {
+          case 1:
+            addDishToCategory();
+            break;
+          case 2:
+            deleteDishFromCategory();
+            break;
+          case 3:
+            updateDishInfo();
+            break;
+          case 4:
+            showAllMenu();
+            break;
+          case 5:
+            searchDishByName();
+            break;
+          case 6:
+            alert("Thoát");
+            break;
+          default:
+            alert("Lựa chọn không hợp lệ. Mời bạn chọn lại.");
+        }
+      } while (choice !== 6);
+    </script>
+  </body>
+</html>
