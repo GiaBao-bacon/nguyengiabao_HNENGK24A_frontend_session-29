@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Công Việc</title>
+  </head>
+  <body>
+    <script>
+      let tasks = [];
+
+      class Task {
+        constructor(id, name, description, startTime, status) {
+          this.id = id;
+          this.name = name;
+          this.description = description;
+          this.startTime = startTime;
+          this.status = status;
+        }
+
+        updateStatus(newStatus) {
+          this.status = newStatus;
+        }
+      }
+
+      function addTask() {
+        let id = prompt("Mời bạn nhập ID công việc:");
+        let name = prompt("Mời bạn nhập tên công việc:");
+        let description = prompt("Mời bạn nhập mô tả công việc:");
+        let startTime = prompt("Mời bạn nhập thời gian bắt đầu:");
+        let status = prompt(
+          "Mời bạn nhập trạng thái công việc (completed/incomplete):"
+        );
+
+        tasks.push(new Task(id, name, description, startTime, status));
+        alert("Công việc đã được thêm vào danh sách!");
+      }
+
+      function displayTasks() {
+        let allTasks = tasks
+          .map(
+            (task) =>
+              `ID: ${task.id}\nTên công việc: ${task.name}\nMô tả: ${task.description}\nThời gian bắt đầu: ${task.startTime}\nTrạng thái: ${task.status}`
+          )
+          .join("\n\n");
+        alert(allTasks || "Không có công việc nào trong danh sách.");
+      }
+
+      function updateTaskStatus() {
+        let id = prompt("Mời bạn nhập ID công việc cần cập nhật trạng thái:");
+        let task = tasks.find((t) => t.id === id);
+        if (task) {
+          let newStatus = prompt(
+            "Mời bạn nhập trạng thái mới (completed/incomplete):"
+          );
+          task.updateStatus(newStatus);
+          alert("Trạng thái công việc đã được cập nhật!");
+        } else {
+          alert("Không tìm thấy công việc với ID này.");
+        }
+      }
+
+      function filterTasksByStatus() {
+        let statusFilter = prompt(
+          "Mời bạn nhập trạng thái cần lọc (completed/incomplete):"
+        );
+        let filteredTasks = tasks.filter(
+          (task) => task.status === statusFilter
+        );
+        if (filteredTasks.length > 0) {
+          alert(
+            "Kết quả lọc:\n" +
+              filteredTasks
+                .map(
+                  (task) =>
+                    `ID: ${task.id}\nTên công việc: ${task.name}\nTrạng thái: ${task.status}`
+                )
+                .join("\n\n")
+          );
+        } else {
+          alert("Không có công việc nào với trạng thái này.");
+        }
+      }
+
+      function sortTasksByStatus() {
+        tasks.sort((a, b) => a.status.localeCompare(b.status));
+        alert("Danh sách công việc đã được sắp xếp theo trạng thái.");
+      }
+
+      function showMenu() {
+        return prompt(
+          "Mời bạn nhập lựa chọn:\n1. Thêm công việc mới.\n2. Hiển thị tất cả công việc.\n3. Cập nhật trạng thái công việc.\n4. Lọc công việc theo trạng thái.\n5. Sắp xếp công việc theo trạng thái.\n6. Thoát"
+        );
+      }
+
+      let choice;
+      do {
+        choice = showMenu();
+        choice = parseInt(choice);
+
+        switch (choice) {
+          case 1:
+            addTask();
+            break;
+          case 2:
+            displayTasks();
+            break;
+          case 3:
+            updateTaskStatus();
+            break;
+          case 4:
+            filterTasksByStatus();
+            break;
+          case 5:
+            sortTasksByStatus();
+            break;
+          case 6:
+            alert("Thoát");
+            break;
+          default:
+            alert("Lựa chọn không hợp lệ. Mời bạn chọn lại.");
+        }
+      } while (choice !== 6);
+    </script>
+  </body>
+</html>
